@@ -19,5 +19,5 @@ func runTerminalCommand(_ command: String, workingDirectory: String? = nil) thro
     let data = pipe.fileHandleForReading.readDataToEndOfFile()
     let output = String(data: data, encoding: .utf8)!
 
-    print(#function, command, "\n", output)
+    print(command, "\n", output)
 }

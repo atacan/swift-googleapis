@@ -16,6 +16,7 @@ func generateCode(for sourceDirectory: URL, in targetDirectory: URL) throws {
     let workingDirectory = projectRoot.appendingPathComponent("googleapis")
     let protocCommand = """
     protoc \
+    --plugin=/Users/atacan/protoc-gen-grpc-swift \
     --proto_path=\(workingDirectory.path) \
     --swift_out=Visibility=Public:\(targetDirectory.path) \
     --grpc-swift_out=Visibility=Public,Client=true,Server=false:\(targetDirectory.path) \
@@ -33,5 +34,15 @@ struct PrepareMain {
         let targetGenerativeLanguage = projectRoot.appendingPathComponent("Sources/Generativelanguage/GeneratedSources")
 
         try generateCode(for: sourceGenerativeLanguage, in: targetGenerativeLanguage)
+
+        let protoDirectoriesToAlwaysInclude = [
+            "googleapis/google/longrunning": "GoogleLongRunning",
+            "googleapis/google/api": "GoogleAPI",
+            "googleapis/google/rpc": "GoogleRPC",
+        ]
+
+        for (protoDirectory, targetDirectory) in protoDirectoriesToAlwaysInclude {
+            try generateCode(for: projectRoot.appendingPathComponent(protoDirectory), in: projectRoot.appendingPathComponent("Sources/\(targetDirectory)/GeneratedSources"))
+        }
     }
 }
