@@ -13,19 +13,25 @@ func generateCode(for sourceDirectory: URL, in targetDirectory: URL) throws {
         try! FileManager.default.createDirectory(at: targetDirectory, withIntermediateDirectories: true, attributes: nil)
     }
 
+    let workingDirectory = projectRoot.appendingPathComponent("googleapis")
     let protocCommand = """
-    protoc --swift_out=Visibility=Public:\(targetDirectory.path) \
+    protoc \
+    --proto_path=\(workingDirectory.path) \
+    --swift_out=Visibility=Public:\(targetDirectory.path) \
     --grpc-swift_out=Visibility=Public,Client=true,Server=false:\(targetDirectory.path) \
-    *.proto
+    \(sourceDirectory.path)/*.proto
     """
-
-    try runTerminalCommand(protocCommand, workingDirectory: projectRoot.path)
+    try runTerminalCommand(protocCommand, workingDirectory: workingDirectory.path)
 }
 
 @main
 struct PrepareMain {
 
-    static func main() {
-        print(projectRoot)
+    static func main() throws {
+        // googleapis/google/ai/generativelanguage/v1beta
+        let sourceGenerativeLanguage = projectRoot.appendingPathComponent("googleapis/google/ai/generativelanguage/v1beta")
+        let targetGenerativeLanguage = projectRoot.appendingPathComponent("Sources/Generativelanguage/GeneratedSources")
+
+        try generateCode(for: sourceGenerativeLanguage, in: targetGenerativeLanguage)
     }
 }
