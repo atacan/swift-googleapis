@@ -5,11 +5,15 @@ import PackageDescription
 
 let package = Package(
     name: "swift-googleapis",
+    platforms: [
+        .macOS("15.0"),
+        .iOS("16.0"),
+        .watchOS("9.0"),
+        .tvOS("16.0"),
+        .visionOS("1.0"),
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "GenerativeLanguage",
-            targets: ["GenerativeLanguage"])
+        .library(name: "GenerativeLanguage", targets: ["GenerativeLanguage"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.29.0"),
@@ -18,10 +22,42 @@ let package = Package(
         .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", from: "1.0.0"),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "GenerativeLanguage"),
+            name: "GoogleAPI",
+            dependencies: [
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                .product(name: "GRPCCore", package: "grpc-swift"),
+                .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
+            ]
+        ),
+        .target(
+            name: "GoogleRPC",
+            dependencies: [
+                .product(name: "GRPCCore", package: "grpc-swift"),
+                .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+            ]
+        ),
+        .target(
+            name: "GoogleLongRunning",
+            dependencies: [
+                .product(name: "GRPCCore", package: "grpc-swift"),
+                .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                .target(name: "GoogleRPC"),
+            ]
+        ),
+        .target(
+            name: "GenerativeLanguage",
+            dependencies: [
+                .product(name: "GRPCCore", package: "grpc-swift"),
+                .product(name: "SwiftProtobuf", package: "swift-protobuf"),
+                .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
+                .target(name: "GoogleAPI"),
+                .target(name: "GoogleRPC"),
+                .target(name: "GoogleLongRunning"),
+            ]
+        ),
         .testTarget(
             name: "GenerativeLanguageTests",
             dependencies: ["GenerativeLanguage"]
