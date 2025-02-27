@@ -13,7 +13,7 @@ let package = Package(
         .visionOS("1.0"),
     ],
     products: [
-        .library(name: "GenerativeLanguage", targets: ["GenerativeLanguage"]),
+        .library(name: "GenerativeLanguage", targets: ["GenerativeLanguage"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.29.0"),
@@ -53,6 +53,8 @@ let package = Package(
                 .product(name: "GRPCCore", package: "grpc-swift"),
                 .product(name: "SwiftProtobuf", package: "swift-protobuf"),
                 .product(name: "GRPCProtobuf", package: "grpc-swift-protobuf"),
+                .product(name: "GRPCNIOTransportHTTP2", package: "grpc-swift-nio-transport"),
+
                 .target(name: "GoogleAPI"),
                 .target(name: "GoogleRPC"),
                 .target(name: "GoogleLongRunning"),
