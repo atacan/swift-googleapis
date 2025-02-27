@@ -20,5 +20,6 @@ let package = Package(
             name: "GenerativeLanguageTests",
             dependencies: ["GenerativeLanguage"]
         ),
+        .executableTarget(name: "Prepare"),
     ]
 )

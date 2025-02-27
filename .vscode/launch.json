@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-googleapis}",
+            "name": "Debug Prepare",
+            "program": "${workspaceFolder:swift-googleapis}/.build/debug/Prepare",
+            "preLaunchTask": "swift: Build Debug Prepare"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-googleapis}",
+            "name": "Release Prepare",
+            "program": "${workspaceFolder:swift-googleapis}/.build/release/Prepare",
+            "preLaunchTask": "swift: Build Release Prepare"
+        }
+    ]
+}
