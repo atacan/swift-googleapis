@@ -84,8 +84,8 @@ func flattenSwiftFiles(in targetDirectory: URL) throws {
 struct PrepareMain {
 
     static func main() throws {
-        // googleapis/google/ai/generativelanguage/v1beta3
-        let sourceGenerativeLanguage = projectRoot.appendingPathComponent("googleapis/google/ai/generativelanguage/v1beta3")
+        // googleapis/google/ai/generativelanguage/v1
+        let sourceGenerativeLanguage = projectRoot.appendingPathComponent("googleapis/google/ai/generativelanguage/v1")
         let targetGenerativeLanguage = projectRoot.appendingPathComponent("Sources/Generativelanguage/GeneratedSources")
 
         try generateCode(for: sourceGenerativeLanguage, in: targetGenerativeLanguage)
