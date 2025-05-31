@@ -33,11 +33,17 @@ func flattenSwiftFiles(in targetDirectory: URL) throws {
     var swiftFiles: [URL] = []
     var emptyDirectories: [URL] = []
     
-    // Find all .swift files and collect directories that will become empty
+    // Find all .swift files (excluding .grpc.swift files) and collect directories that will become empty
     while let fileURL = enumerator?.nextObject() as? URL {
         let resourceValues = try fileURL.resourceValues(forKeys: [.isRegularFileKey])
         if resourceValues.isRegularFile == true && fileURL.pathExtension == "swift" {
-            swiftFiles.append(fileURL)
+            // Skip gRPC service files - only keep proto message/enum files
+            if !fileURL.lastPathComponent.contains(".grpc.swift") {
+                swiftFiles.append(fileURL)
+            } else {
+                // Remove gRPC files since we don't want them
+                try fileManager.removeItem(at: fileURL)
+            }
             // Track the parent directory for potential cleanup
             let parentDir = fileURL.deletingLastPathComponent()
             if parentDir != targetDirectory {
@@ -46,7 +52,7 @@ func flattenSwiftFiles(in targetDirectory: URL) throws {
         }
     }
     
-    // Move all .swift files to the target directory root
+    // Move all remaining .swift files to the target directory root
     for swiftFile in swiftFiles {
         let fileName = swiftFile.lastPathComponent
         let newLocation = targetDirectory.appendingPathComponent(fileName)
