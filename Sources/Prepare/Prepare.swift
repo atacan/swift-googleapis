@@ -59,6 +59,12 @@ func flattenSwiftFiles(in targetDirectory: URL) throws {
         
         // Only move if it's not already in the target directory
         if swiftFile != newLocation {
+            // Ensure the target directory exists
+            let targetDir = newLocation.deletingLastPathComponent()
+            if !fileManager.fileExists(atPath: targetDir.path) {
+                try fileManager.createDirectory(at: targetDir, withIntermediateDirectories: true, attributes: nil)
+            }
+            
             // Remove existing file if it exists
             if fileManager.fileExists(atPath: newLocation.path) {
                 try fileManager.removeItem(at: newLocation)
@@ -84,9 +90,9 @@ func flattenSwiftFiles(in targetDirectory: URL) throws {
 struct PrepareMain {
 
     static func main() throws {
-        // googleapis/google/ai/generativelanguage/v1
-        let sourceGenerativeLanguage = projectRoot.appendingPathComponent("googleapis/google/ai/generativelanguage/v1")
-        let targetGenerativeLanguage = projectRoot.appendingPathComponent("Sources/Generativelanguage/GeneratedSources")
+        // googleapis/google/ai/generativelanguage/v1beta
+        let sourceGenerativeLanguage = projectRoot.appendingPathComponent("googleapis/google/ai/generativelanguage/v1beta")
+        let targetGenerativeLanguage = projectRoot.appendingPathComponent("Sources/GenerativeLanguage/GeneratedSources")
 
         try generateCode(for: sourceGenerativeLanguage, in: targetGenerativeLanguage)
 
