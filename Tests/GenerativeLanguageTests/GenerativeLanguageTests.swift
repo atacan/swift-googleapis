@@ -1,4 +1,5 @@
 import Testing
+import SwiftProtobuf
 import Foundation
 @testable import GenerativeLanguage
 
@@ -17,5 +18,8 @@ import Foundation
         ]
     }
 
-    
+    var options = JSONEncodingOptions()
+    options.useDeterministicOrdering = true
+    options.preserveProtoFieldNames = false
+    try print(request.jsonString(options: options))
 }
